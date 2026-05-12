@@ -29,6 +29,66 @@ This is a first-pass descriptive analysis of GitHub PR metadata, changed-file su
 | title_landmark     |   136 |        0.949 |               0.044 |
 | title_fix          |    38 |        0.632 |               0.211 |
 
+## Git-derived base/head diff metrics
+
+These metrics are computed locally with `git diff base_sha..head_sha` after fetching all PR heads. They are independent of GitHub API file summaries and capture stale-branch two-dot diffs that can delete already-current content. They are still syntactic triage signals, not semantic safety labels.
+
+|   PRs_with_git_metrics |   base_commits_available |   head_commits_available |   merge_shas_available |   head_not_descendant_of_base |   mean_git_deletions |   median_git_deletions |   max_git_deletions |
+|-----------------------:|-------------------------:|-------------------------:|-----------------------:|------------------------------:|---------------------:|-----------------------:|--------------------:|
+|                    610 |                      610 |                      610 |                    356 |                           144 |              275.034 |                      0 |               48969 |
+
+### Git metric distributions
+
+| metric                  |    mean |   median |   p90 |   max |
+|:------------------------|--------:|---------:|------:|------:|
+| git_commits_ahead_base  |   1.039 |      1   |   1   |     5 |
+| git_commits_behind_base |   3.749 |      0   |   1   |   823 |
+| git_files_changed       |   1.721 |      1   |   2   |   128 |
+| git_additions           | 119.328 |     32.5 | 214.1 |  2221 |
+| git_deletions           | 275.034 |      0   | 202   | 48969 |
+
+### API vs local-git agreement checks
+
+| comparison                          |   mismatches |
+|:------------------------------------|-------------:|
+| main.js touch API vs git            |            4 |
+| landmark touch API vs git           |           73 |
+| API deletion count differs from git |          142 |
+
+### Largest git two-dot deletion PRs
+
+|   number | title                                                                                         | user                 |   merged |   closed_unmerged |   git_commits_behind_base |   git_commits_ahead_base |   git_files_changed |   git_additions |   git_deletions |   git_touch_main_js |   git_touch_landmark |   risk_comment_label |
+|---------:|:----------------------------------------------------------------------------------------------|:---------------------|---------:|------------------:|--------------------------:|-------------------------:|--------------------:|----------------:|----------------:|--------------------:|---------------------:|---------------------:|
+|      310 | feat(landmark): Add Hostile Environment World Landmark                                        | gemini-25-pro-collab |        0 |                 1 |                       823 |                        2 |                 107 |            1100 |           48969 |                   1 |                    1 |                    1 |
+|      299 | Add Hostile Environment World landmark                                                        | gemini-25-pro-collab |        0 |                 1 |                       816 |                        1 |                 106 |            1064 |           47982 |                   1 |                    1 |                    0 |
+|        2 | [EMERGENCY] Reconcile universe configuration - restore all 14+ worlds                         | deepseek-v32         |        0 |                 1 |                       394 |                        2 |                 128 |             271 |           33687 |                   1 |                    1 |                    1 |
+|      524 | feat: add 25 exotic matter sights (13126-13150)                                               | gemini-25-pro-collab |        0 |                 1 |                        24 |                        1 |                   3 |              50 |            3431 |                   1 |                    1 |                    0 |
+|      284 | Batch 104: High-Energy Physics (11176-11200)                                                  | claudehaiku45        |        0 |                 1 |                         5 |                        1 |                   3 |             107 |            1952 |                   1 |                    1 |                    1 |
+|      222 | Batch: Exotic Particle Physics & Condensed Matter Anomalies (10,826-10,850)                   | gemini-3-1-pro       |        1 |                 0 |                         0 |                        1 |                   1 |             176 |            1508 |                   1 |                    0 |                    0 |
+|      482 | feat: add 25 exotic matter sights (13001-13025)                                               | gemini-25-pro-collab |        0 |                 1 |                         6 |                        1 |                   2 |             326 |             838 |                   1 |                    1 |                    1 |
+|      611 | Batch 205: Neutron Star Equation of State (13751-13775)                                       | claudehaiku45        |        0 |                 1 |                         0 |                        1 |                   1 |              26 |             773 |                   1 |                    0 |                    0 |
+|      560 | Batch: Computational Astrophysics – Numerical Methods & HPC (25 cosmic sights, 13,351-13,375) | deepseek-v32         |        0 |                 1 |                         5 |                        1 |                   2 |             151 |             744 |                   1 |                    1 |                    1 |
+|      275 | Fix hub regression: restore missing bootstrap initialization                                  | claudehaiku45        |        0 |                 1 |                         4 |                        1 |                   2 |            1456 |             739 |                   1 |                    1 |                    1 |
+|      329 | Batch 127: Computational Astrophysics & Numerical Methods (11,576-11,600)                     | deepseek-v32         |        0 |                 1 |                         6 |                        2 |                   3 |              81 |             689 |                   1 |                    1 |                    1 |
+|      142 | Add batch 62: Stellar Atmospheres & Wind Phenomena (23 sights, 10,101-10,123)                 | claudehaiku45        |        0 |                 1 |                         6 |                        1 |                   2 |             151 |             664 |                   1 |                    1 |                    1 |
+
+### Largest deletion PRs where head is not a descendant of base
+
+|   number | title                                                                                         | user                 |   merged |   closed_unmerged |   git_commits_behind_base |   git_files_changed |   git_additions |   git_deletions |   risk_comment_label |
+|---------:|:----------------------------------------------------------------------------------------------|:---------------------|---------:|------------------:|--------------------------:|--------------------:|----------------:|----------------:|---------------------:|
+|      310 | feat(landmark): Add Hostile Environment World Landmark                                        | gemini-25-pro-collab |        0 |                 1 |                       823 |                 107 |            1100 |           48969 |                    1 |
+|      299 | Add Hostile Environment World landmark                                                        | gemini-25-pro-collab |        0 |                 1 |                       816 |                 106 |            1064 |           47982 |                    0 |
+|        2 | [EMERGENCY] Reconcile universe configuration - restore all 14+ worlds                         | deepseek-v32         |        0 |                 1 |                       394 |                 128 |             271 |           33687 |                    1 |
+|      524 | feat: add 25 exotic matter sights (13126-13150)                                               | gemini-25-pro-collab |        0 |                 1 |                        24 |                   3 |              50 |            3431 |                    0 |
+|      284 | Batch 104: High-Energy Physics (11176-11200)                                                  | claudehaiku45        |        0 |                 1 |                         5 |                   3 |             107 |            1952 |                    1 |
+|      482 | feat: add 25 exotic matter sights (13001-13025)                                               | gemini-25-pro-collab |        0 |                 1 |                         6 |                   2 |             326 |             838 |                    1 |
+|      560 | Batch: Computational Astrophysics – Numerical Methods & HPC (25 cosmic sights, 13,351-13,375) | deepseek-v32         |        0 |                 1 |                         5 |                   2 |             151 |             744 |                    1 |
+|      275 | Fix hub regression: restore missing bootstrap initialization                                  | claudehaiku45        |        0 |                 1 |                         4 |                   2 |            1456 |             739 |                    1 |
+|      329 | Batch 127: Computational Astrophysics & Numerical Methods (11,576-11,600)                     | deepseek-v32         |        0 |                 1 |                         6 |                   3 |              81 |             689 |                    1 |
+|      142 | Add batch 62: Stellar Atmospheres & Wind Phenomena (23 sights, 10,101-10,123)                 | claudehaiku45        |        0 |                 1 |                         6 |                   2 |             151 |             664 |                    1 |
+|      140 | Add batch 61: Cosmological Structures & Large-Scale Phenomena (25 sights, 10,180-10,204)      | claudehaiku45        |        0 |                 1 |                         5 |                   2 |             153 |             639 |                    1 |
+|      138 | Restore getDirectoryEntries DOM query                                                         | gpt-5-5-village      |        0 |                 1 |                         4 |                   2 |               0 |             578 |                    0 |
+
 ## Comment keyword labels
 
 | keyword_label       |   prs |   merge_rate |
@@ -58,43 +118,43 @@ This is a first-pass descriptive analysis of GitHub PR metadata, changed-file su
 
 ## Feature screen: association with merge outcome
 
-| feature                | kind    |   n_feature |   target_rate_if_feature |   target_rate_if_absent |   difference |   corr |
-|:-----------------------|:--------|------------:|-------------------------:|------------------------:|-------------:|-------:|
-| comment_count          | numeric |         610 |                          |                         |              | -0.676 |
-| comment_chars          | numeric |         610 |                          |                         |              | -0.487 |
-| kw_stale               | binary  |          76 |                    0.053 |                   0.659 |       -0.607 | -0.406 |
-| touch_anchorage        | binary  |         129 |                    0.961 |                   0.482 |        0.479 |  0.397 |
-| title_landmark         | binary  |         136 |                    0.949 |                   0.479 |        0.47  |  0.397 |
-| touch_landmark         | binary  |         135 |                    0.941 |                   0.482 |        0.459 |  0.386 |
-| touch_main_js          | binary  |         457 |                    0.475 |                   0.908 |       -0.434 | -0.381 |
-| title_cosmic_batch     | binary  |         442 |                    0.477 |                   0.863 |       -0.386 | -0.35  |
-| kw_duplicate           | binary  |          52 |                    0.019 |                   0.636 |       -0.617 | -0.349 |
-| kw_rollback            | binary  |          29 |                    0.034 |                   0.611 |       -0.577 | -0.249 |
-| kw_merge_safe_positive | binary  |          26 |                    0.077 |                   0.606 |       -0.529 | -0.217 |
-| prs_created_prior_30m  | numeric |         610 |                          |                         |              | -0.211 |
-| merges_prior_30m       | numeric |         610 |                          |                         |              | -0.174 |
-| kw_not_merge_safe      | binary  |           8 |                    0     |                   0.591 |       -0.591 | -0.136 |
-| kw_post_array          | binary  |           7 |                    0     |                   0.59  |       -0.59  | -0.128 |
+| feature                      | kind    |   n_feature |   target_rate_if_feature |   target_rate_if_absent |   difference |   corr |
+|:-----------------------------|:--------|------------:|-------------------------:|------------------------:|-------------:|-------:|
+| comment_count                | numeric |         610 |                          |                         |              | -0.676 |
+| git_base_is_ancestor_of_head | binary  |         466 |                    0.76  |                   0.014 |        0.746 |  0.642 |
+| git_merge_base_is_base       | binary  |         466 |                    0.76  |                   0.014 |        0.746 |  0.642 |
+| git_deletion_ratio           | numeric |         610 |                          |                         |              | -0.52  |
+| comment_chars                | numeric |         610 |                          |                         |              | -0.487 |
+| kw_stale                     | binary  |          76 |                    0.053 |                   0.659 |       -0.607 | -0.406 |
+| touch_anchorage              | binary  |         129 |                    0.961 |                   0.482 |        0.479 |  0.397 |
+| title_landmark               | binary  |         136 |                    0.949 |                   0.479 |        0.47  |  0.397 |
+| git_touch_main_js            | binary  |         459 |                    0.473 |                   0.921 |       -0.448 | -0.392 |
+| touch_landmark               | binary  |         135 |                    0.941 |                   0.482 |        0.459 |  0.386 |
+| touch_main_js                | binary  |         457 |                    0.475 |                   0.908 |       -0.434 | -0.381 |
+| title_cosmic_batch           | binary  |         442 |                    0.477 |                   0.863 |       -0.386 | -0.35  |
+| kw_duplicate                 | binary  |          52 |                    0.019 |                   0.636 |       -0.617 | -0.349 |
+| kw_rollback                  | binary  |          29 |                    0.034 |                   0.611 |       -0.577 | -0.249 |
+| kw_merge_safe_positive       | binary  |          26 |                    0.077 |                   0.606 |       -0.529 | -0.217 |
 
 ## Feature screen: association with keyword risk comments
 
-| feature                | kind    |   n_feature |   target_rate_if_feature |   target_rate_if_absent |   difference |   corr |
-|:-----------------------|:--------|------------:|-------------------------:|------------------------:|-------------:|-------:|
-| comment_count          | numeric |         610 |                          |                         |              |  0.785 |
-| kw_stale               | binary  |          76 |                    1     |                   0.09  |        0.91  |  0.747 |
-| comment_chars          | numeric |         610 |                          |                         |              |  0.708 |
-| kw_duplicate           | binary  |          52 |                    1     |                   0.129 |        0.871 |  0.604 |
-| kw_rollback            | binary  |          29 |                    1     |                   0.164 |        0.836 |  0.442 |
-| kw_merge_safe_positive | binary  |          26 |                    0.962 |                   0.17  |        0.792 |  0.398 |
-| prs_created_prior_30m  | numeric |         610 |                          |                         |              |  0.306 |
-| merges_prior_30m       | numeric |         610 |                          |                         |              |  0.272 |
-| touch_anchorage        | binary  |         129 |                    0.023 |                   0.252 |       -0.228 | -0.232 |
-| kw_not_merge_safe      | binary  |           8 |                    1     |                   0.193 |        0.807 |  0.228 |
-| touch_main_js          | binary  |         457 |                    0.256 |                   0.046 |        0.21  |  0.226 |
-| touch_landmark         | binary  |         135 |                    0.037 |                   0.251 |       -0.213 | -0.22  |
-| kw_post_array          | binary  |           7 |                    1     |                   0.194 |        0.806 |  0.213 |
-| title_landmark         | binary  |         136 |                    0.044 |                   0.249 |       -0.205 | -0.212 |
-| title_cosmic_batch     | binary  |         442 |                    0.244 |                   0.095 |        0.149 |  0.166 |
+| feature                      | kind    |   n_feature |   target_rate_if_feature |   target_rate_if_absent |   difference |   corr |
+|:-----------------------------|:--------|------------:|-------------------------:|------------------------:|-------------:|-------:|
+| comment_count                | numeric |         610 |                          |                         |              |  0.785 |
+| kw_stale                     | binary  |          76 |                    1     |                   0.09  |        0.91  |  0.747 |
+| comment_chars                | numeric |         610 |                          |                         |              |  0.708 |
+| kw_duplicate                 | binary  |          52 |                    1     |                   0.129 |        0.871 |  0.604 |
+| kw_rollback                  | binary  |          29 |                    1     |                   0.164 |        0.836 |  0.442 |
+| git_merge_base_is_base       | binary  |         466 |                    0.107 |                   0.514 |       -0.407 | -0.429 |
+| git_base_is_ancestor_of_head | binary  |         466 |                    0.107 |                   0.514 |       -0.407 | -0.429 |
+| git_deletion_ratio           | numeric |         610 |                          |                         |              |  0.406 |
+| kw_merge_safe_positive       | binary  |          26 |                    0.962 |                   0.17  |        0.792 |  0.398 |
+| prs_created_prior_30m        | numeric |         610 |                          |                         |              |  0.306 |
+| merges_prior_30m             | numeric |         610 |                          |                         |              |  0.272 |
+| git_touch_main_js            | binary  |         459 |                    0.257 |                   0.04  |        0.217 |  0.233 |
+| touch_anchorage              | binary  |         129 |                    0.023 |                   0.252 |       -0.228 | -0.232 |
+| kw_not_merge_safe            | binary  |           8 |                    1     |                   0.193 |        0.807 |  0.228 |
+| touch_main_js                | binary  |         457 |                    0.256 |                   0.046 |        0.21  |  0.226 |
 
 ## Highest-deletion PRs
 
@@ -137,3 +197,5 @@ This is a first-pass descriptive analysis of GitHub PR metadata, changed-file su
 - Keyword labels are useful for triage but should be treated as weak supervision; the next step is manual validation of a stratified sample, especially high-deletion and stale/rollback-commented PRs.
 
 - Deletion-heavy diffs, `main.js` touches, and queue-density features are available for testing the preregistered stale/rollback-risk hypotheses.
+
+- Local git metrics sharpen the stale-branch picture: every PR base/head commit was recoverable, but 144 PR heads were not descendants of their recorded base and some two-dot diffs implied tens of thousands of deletions. These are triage flags, not automatic failure labels.

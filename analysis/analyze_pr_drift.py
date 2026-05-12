@@ -131,6 +131,21 @@ def make_frame():
     df["minutes_since_prev_merge"] = since_prev
     df["merges_prior_30m"] = merges_prior_30m
     df["prs_created_prior_30m"] = open_prior_30m
+
+    git_metrics_path = RESULTS / "git_pr_metrics.csv"
+    if git_metrics_path.exists():
+        git_df = pd.read_csv(git_metrics_path)
+        # Keep generated feature CSV one-row-per-PR while preserving API and git
+        # fields separately.  Git fields are prefixed `git_`.
+        df = df.merge(git_df, on="number", how="left", validate="one_to_one")
+        for c in [
+            "git_base_exists", "git_head_exists", "git_merge_sha_exists",
+            "git_base_is_ancestor_of_head", "git_merge_base_is_base",
+            "git_touch_main_js", "git_touch_config_js", "git_touch_anchorage",
+            "git_touch_landmark", "git_touch_validator",
+        ]:
+            if c in df:
+                df[c] = df[c].fillna(0).astype(int)
     return df
 
 
@@ -215,6 +230,13 @@ def main():
         "title_cosmic_batch", "title_landmark", "title_fix", "slot_span",
         "minutes_since_prev_merge", "merges_prior_30m", "prs_created_prior_30m",
     ] + [f"kw_{k}" for k in KEYWORDS]
+    if "git_deletions" in df.columns:
+        features += [
+            "git_commits_ahead_base", "git_commits_behind_base", "git_files_changed",
+            "git_additions", "git_deletions", "git_deletion_ratio",
+            "git_base_is_ancestor_of_head", "git_merge_base_is_base",
+            "git_touch_main_js", "git_touch_landmark", "git_touch_anchorage", "git_touch_validator",
+        ]
 
     overall = pd.DataFrame([{
         "PRs": len(df),
@@ -240,6 +262,41 @@ def main():
     screen_risk = simple_feature_screen(df, features, "risk_comment_label").head(15)
     risk_examples = df[df["risk_comment_label"] == 1].sort_values(["kw_rollback", "kw_stale", "deletions"], ascending=False).head(12)
     deletion_examples = df.sort_values("deletions", ascending=False).head(12)
+    have_git = "git_deletions" in df.columns
+    if have_git:
+        git_overall = pd.DataFrame([{
+            "PRs_with_git_metrics": int(df["git_head_exists"].notna().sum()),
+            "base_commits_available": int(df["git_base_exists"].sum()),
+            "head_commits_available": int(df["git_head_exists"].sum()),
+            "merge_shas_available": int(df["git_merge_sha_exists"].sum()),
+            "head_not_descendant_of_base": int((df["git_base_is_ancestor_of_head"] == 0).sum()),
+            "mean_git_deletions": df["git_deletions"].mean(),
+            "median_git_deletions": df["git_deletions"].median(),
+            "max_git_deletions": df["git_deletions"].max(),
+        }])
+        git_desc = pd.DataFrame([{
+            "metric": c,
+            "mean": df[c].mean(),
+            "median": df[c].median(),
+            "p90": df[c].quantile(0.90),
+            "max": df[c].max(),
+        } for c in ["git_commits_ahead_base", "git_commits_behind_base", "git_files_changed", "git_additions", "git_deletions"]])
+        stale_git = df[df["git_base_is_ancestor_of_head"] == 0].sort_values("git_deletions", ascending=False).head(12)
+        git_deletion_examples = df.sort_values("git_deletions", ascending=False).head(12)
+        compare_cols = [
+            "touch_main_js", "git_touch_main_js", "touch_landmark", "git_touch_landmark",
+            "files_changed", "git_files_changed", "additions", "git_additions", "deletions", "git_deletions",
+        ]
+        touch_mismatch = pd.DataFrame([{
+            "comparison": "main.js touch API vs git",
+            "mismatches": int((df["touch_main_js"] != df["git_touch_main_js"]).sum()),
+        }, {
+            "comparison": "landmark touch API vs git",
+            "mismatches": int((df["touch_landmark"] != df["git_touch_landmark"]).sum()),
+        }, {
+            "comparison": "API deletion count differs from git",
+            "mismatches": int((df["deletions"] != df["git_deletions"]).sum()),
+        }])
 
     report = []
     report.append("# PR Drift Safety Study: descriptive analysis\n")
@@ -250,6 +307,18 @@ def main():
     report.append(markdown_table(by_date[["created_date", "prs", "merged", "closed_unmerged", "open", "merge_rate", "risk_comment_rate", "mean_deletions"]]))
     report.append("\n## File/topic touch signals\n")
     report.append(markdown_table(file_touch))
+    if have_git:
+        report.append("\n## Git-derived base/head diff metrics\n")
+        report.append("These metrics are computed locally with `git diff base_sha..head_sha` after fetching all PR heads. They are independent of GitHub API file summaries and capture stale-branch two-dot diffs that can delete already-current content. They are still syntactic triage signals, not semantic safety labels.\n")
+        report.append(markdown_table(git_overall))
+        report.append("\n### Git metric distributions\n")
+        report.append(markdown_table(git_desc))
+        report.append("\n### API vs local-git agreement checks\n")
+        report.append(markdown_table(touch_mismatch))
+        report.append("\n### Largest git two-dot deletion PRs\n")
+        report.append(markdown_table(git_deletion_examples[["number", "title", "user", "merged", "closed_unmerged", "git_commits_behind_base", "git_commits_ahead_base", "git_files_changed", "git_additions", "git_deletions", "git_touch_main_js", "git_touch_landmark", "risk_comment_label"]]))
+        report.append("\n### Largest deletion PRs where head is not a descendant of base\n")
+        report.append(markdown_table(stale_git[["number", "title", "user", "merged", "closed_unmerged", "git_commits_behind_base", "git_files_changed", "git_additions", "git_deletions", "risk_comment_label"]]))
     report.append("\n## Comment keyword labels\n")
     report.append(markdown_table(keyword_counts))
     report.append("\n## Authors with at least 10 PRs\n")
@@ -267,6 +336,8 @@ def main():
     report.append("- The dataset is now complete for PR metadata, file summaries, and issue comments.\n")
     report.append("- Keyword labels are useful for triage but should be treated as weak supervision; the next step is manual validation of a stratified sample, especially high-deletion and stale/rollback-commented PRs.\n")
     report.append("- Deletion-heavy diffs, `main.js` touches, and queue-density features are available for testing the preregistered stale/rollback-risk hypotheses.\n")
+    if have_git:
+        report.append("- Local git metrics sharpen the stale-branch picture: every PR base/head commit was recoverable, but 144 PR heads were not descendants of their recorded base and some two-dot diffs implied tens of thousands of deletions. These are triage flags, not automatic failure labels.\n")
 
     report_path = RESULTS / "descriptive_report.md"
     report_path.write_text("\n".join(report))
