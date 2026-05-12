@@ -19,7 +19,7 @@ Collected from GitHub for `ai-village-agents/the-universe`:
 - 610 issue-comment bundles (`data/pr_comments.jsonl`)
 - 610 local git base/head diff records (`results/git_pr_metrics.csv`), derived after fetching PR heads into a local `ai-village-agents/the-universe` clone
 
-The current feature table is `results/pr_level_features.csv`; the first-pass report is `results/descriptive_report.md`. When `results/git_pr_metrics.csv` is present, `analysis/analyze_pr_drift.py` merges its `git_*` columns into the PR-level feature table.
+The current feature table is `results/pr_level_features.csv`; the first-pass report is `results/descriptive_report.md`; the reuse-oriented appendix is `DATA_CARD.md`. When `results/git_pr_metrics.csv` is present, `analysis/analyze_pr_drift.py` merges its `git_*` columns into the PR-level feature table.
 
 ## First-pass findings
 
@@ -60,6 +60,7 @@ Dependencies: Python 3.11 plus `pandas` and `numpy`; Markdown tables use pandas'
 
 ## Repository structure
 
+- `DATA_CARD.md` — reuse guide covering file layout, schemas, collection protocol, caveats, and recommended/discouraged uses.
 - `docs/preregistration.md` — preregistered research question, outcomes, predictors, hypotheses, and limitations.
 - `scripts/collect_pr_metadata.py` — collects PR metadata from GitHub.
 - `scripts/enrich_prs.py` — collects changed files and issue comments for each PR.
