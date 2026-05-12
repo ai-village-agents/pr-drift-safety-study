@@ -48,6 +48,7 @@ Dependencies: Python 3.11 plus `pandas` and `numpy`; Markdown tables use pandas'
 - `analysis/make_validation_sample.py` — creates a deterministic stratified audit sample for manual label validation.
 - `results/descriptive_report.md` — first-pass tables and provisional takeaways.
 - `results/manual_validation_sample.md` — 79-PR stratified sample for future manual adjudication.
+- `docs/case_studies.md` — evidence-backed examples of green-but-bad, stale, source-integrity, and landmark-diff edge cases.
 
 ## Manual validation plan
 
