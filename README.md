@@ -19,7 +19,7 @@ Collected from GitHub for `ai-village-agents/the-universe`:
 - 610 issue-comment bundles (`data/pr_comments.jsonl`)
 - 610 local git base/head diff records (`results/git_pr_metrics.csv`), derived after fetching PR heads into a local `ai-village-agents/the-universe` clone
 
-The current feature table is `results/pr_level_features.csv`; the first-pass report is `results/descriptive_report.md`; the reuse-oriented appendix is `DATA_CARD.md`. When `results/git_pr_metrics.csv` is present, `analysis/analyze_pr_drift.py` merges its `git_*` columns into the PR-level feature table.
+The current feature table is [`results/pr_level_features.csv`](results/pr_level_features.csv); the first-pass report is [`results/descriptive_report.md`](results/descriptive_report.md); the reuse-oriented appendix is [`DATA_CARD.md`](DATA_CARD.md). When `results/git_pr_metrics.csv` is present, `analysis/analyze_pr_drift.py` merges its `git_*` columns into the PR-level feature table.
 
 ## First-pass findings
 
@@ -60,24 +60,24 @@ Dependencies: Python 3.11 plus `pandas` and `numpy`; Markdown tables use pandas'
 
 ## Repository structure
 
-- `DATA_CARD.md` — reuse guide covering file layout, schemas, collection protocol, caveats, and recommended/discouraged uses.
-- `docs/preregistration.md` — preregistered research question, outcomes, predictors, hypotheses, and limitations.
-- `scripts/collect_pr_metadata.py` — collects PR metadata from GitHub.
-- `scripts/enrich_prs.py` — collects changed files and issue comments for each PR.
-- `analysis/add_git_metrics.py` — derives local git base/head metrics from a fetched `the-universe` clone.
-- `analysis/extended_gemini_analysis.py` — Gemini 3.1 Pro’s lightweight marginal-rate extension using the feature table.
-- `analysis/model_pr_outcomes.py` — pure-NumPy logistic models for merge and keyword-risk outcomes.
-- `analysis/analyze_pr_drift.py` — builds PR-level features and the descriptive report.
-- `analysis/make_validation_sample.py` — creates a deterministic stratified audit sample for manual label validation.
-- `docs/manual_validation_protocol.md` — coding guide for converting weak labels into manual adjudications.
-- `results/git_pr_metrics.csv` — local git availability, ahead/behind, numstat, name-status, and touch metrics for each PR.
-- `results/gemini_model_analysis.md` — extended heuristic merge-rate analysis contributed by Gemini 3.1 Pro.
-- `results/model_outcomes.md` — multivariable descriptive outcome models showing how local git stale metrics change adjusted associations.
-- `results/descriptive_report.md` — first-pass tables and provisional takeaways.
-- `results/manual_validation_sample.md` — 79-PR stratified sample for future manual adjudication.
-- `results/manual_validation_pilot.md` — 11 evidence-rich pilot manual labels illustrating how weak labels, git metrics, and comments should be adjudicated.
-- `results/manual_validation_template.csv` — spreadsheet-ready copy of the sample with blank manual-label columns.
-- `docs/case_studies.md` — evidence-backed examples of green-but-bad, stale, source-integrity, and landmark-diff edge cases.
+- [`DATA_CARD.md`](DATA_CARD.md) — reuse guide covering file layout, schemas, collection protocol, caveats, and recommended/discouraged uses.
+- [`docs/preregistration.md`](docs/preregistration.md) — preregistered research question, outcomes, predictors, hypotheses, and limitations.
+- [`scripts/collect_pr_metadata.py`](scripts/collect_pr_metadata.py) — collects PR metadata from GitHub.
+- [`scripts/enrich_prs.py`](scripts/enrich_prs.py) — collects changed files and issue comments for each PR.
+- [`analysis/add_git_metrics.py`](analysis/add_git_metrics.py) — derives local git base/head metrics from a fetched `the-universe` clone.
+- [`analysis/extended_gemini_analysis.py`](analysis/extended_gemini_analysis.py) — Gemini 3.1 Pro’s lightweight marginal-rate extension using the feature table.
+- [`analysis/model_pr_outcomes.py`](analysis/model_pr_outcomes.py) — pure-NumPy logistic models for merge and keyword-risk outcomes.
+- [`analysis/analyze_pr_drift.py`](analysis/analyze_pr_drift.py) — builds PR-level features and the descriptive report.
+- [`analysis/make_validation_sample.py`](analysis/make_validation_sample.py) — creates a deterministic stratified audit sample for manual label validation.
+- [`docs/manual_validation_protocol.md`](docs/manual_validation_protocol.md) — coding guide for converting weak labels into manual adjudications.
+- [`results/git_pr_metrics.csv`](results/git_pr_metrics.csv) — local git availability, ahead/behind, numstat, name-status, and touch metrics for each PR.
+- [`results/gemini_model_analysis.md`](results/gemini_model_analysis.md) — extended heuristic merge-rate analysis contributed by Gemini 3.1 Pro.
+- [`results/model_outcomes.md`](results/model_outcomes.md) — multivariable descriptive outcome models showing how local git stale metrics change adjusted associations.
+- [`results/descriptive_report.md`](results/descriptive_report.md) — first-pass tables and provisional takeaways.
+- [`results/manual_validation_sample.md`](results/manual_validation_sample.md) — 79-PR stratified sample for future manual adjudication.
+- [`results/manual_validation_pilot.md`](results/manual_validation_pilot.md) — 11 evidence-rich pilot manual labels illustrating how weak labels, git metrics, and comments should be adjudicated.
+- [`results/manual_validation_template.csv`](results/manual_validation_template.csv) — spreadsheet-ready copy of the sample with blank manual-label columns.
+- [`docs/case_studies.md`](docs/case_studies.md) — evidence-backed examples of green-but-bad, stale, source-integrity, and landmark-diff edge cases.
 
 ## Manual validation plan
 
@@ -92,7 +92,7 @@ The next step is to manually audit a stratified sample across:
 7. green-but-bad comments,
 8. post-array or sparse-array incidents.
 
-Suggested manual fields: `manual_rollback_risk`, `manual_source_integrity_risk`, `manual_duplicate_or_superseded`, and free-text notes. A small pilot application is published in `results/manual_validation_pilot.md`; it is illustrative and deliberately conservative, not the completed 79-PR audit.
+Suggested manual fields: `manual_rollback_risk`, `manual_source_integrity_risk`, `manual_duplicate_or_superseded`, and free-text notes. A small pilot application is published in [`results/manual_validation_pilot.md`](results/manual_validation_pilot.md); it is illustrative and deliberately conservative, not the completed 79-PR audit.
 
 ## Novelty claim
 

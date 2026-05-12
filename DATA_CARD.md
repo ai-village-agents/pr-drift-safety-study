@@ -15,17 +15,17 @@ This data card describes the artifacts in `ai-village-agents/pr-drift-safety-stu
 
 | path | rows | description |
 |---|---:|---|
-| `data/raw_prs.jsonl` | 610 | One JSON object per PR with number, title, author login, state, timestamps, base/head refs and SHAs, merge SHA, and URL. |
-| `data/pr_files.jsonl` | 610 | One JSON object per PR containing GitHub API changed-file summaries. |
-| `data/pr_comments.jsonl` | 610 | One JSON object per PR containing collected issue comments. |
-| `results/pr_level_features.csv` | 610 | Main analysis table combining metadata, API file features, keyword labels, timing features, and `git_*` metrics when present. |
-| `results/git_pr_metrics.csv` | 610 | Local git reconstruction: commit availability, ahead/behind counts, base ancestry, numstat/name-status totals, and file-touch flags. |
-| `results/manual_validation_sample.csv` | 79 | Deterministic stratified sample for future manual adjudication. |
-| `results/manual_validation_template.csv` | 79 | Same sample with blank manual-label columns. |
-| `results/manual_validation_pilot.csv` | 11 | Conservative pilot labels for evidence-rich sampled PRs. |
-| `results/descriptive_report.md` | n/a | Generated descriptive tables and provisional takeaways. |
-| `results/gemini_model_analysis.md` | n/a | Lightweight marginal-rate extension contributed by Gemini 3.1 Pro and updated on current features. |
-| `results/model_outcomes.md` | n/a | Pure-NumPy descriptive logistic outcome models. |
+| [`data/raw_prs.jsonl`](data/raw_prs.jsonl) | 610 | One JSON object per PR with number, title, author login, state, timestamps, base/head refs and SHAs, merge SHA, and URL. |
+| [`data/pr_files.jsonl`](data/pr_files.jsonl) | 610 | One JSON object per PR containing GitHub API changed-file summaries. |
+| [`data/pr_comments.jsonl`](data/pr_comments.jsonl) | 610 | One JSON object per PR containing collected issue comments. |
+| [`results/pr_level_features.csv`](results/pr_level_features.csv) | 610 | Main analysis table combining metadata, API file features, keyword labels, timing features, and `git_*` metrics when present. |
+| [`results/git_pr_metrics.csv`](results/git_pr_metrics.csv) | 610 | Local git reconstruction: commit availability, ahead/behind counts, base ancestry, numstat/name-status totals, and file-touch flags. |
+| [`results/manual_validation_sample.csv`](results/manual_validation_sample.csv) | 79 | Deterministic stratified sample for future manual adjudication. |
+| [`results/manual_validation_template.csv`](results/manual_validation_template.csv) | 79 | Same sample with blank manual-label columns. |
+| [`results/manual_validation_pilot.csv`](results/manual_validation_pilot.csv) | 11 | Conservative pilot labels for evidence-rich sampled PRs. |
+| [`results/descriptive_report.md`](results/descriptive_report.md) | n/a | Generated descriptive tables and provisional takeaways. |
+| [`results/gemini_model_analysis.md`](results/gemini_model_analysis.md) | n/a | Lightweight marginal-rate extension contributed by Gemini 3.1 Pro and updated on current features. |
+| [`results/model_outcomes.md`](results/model_outcomes.md) | n/a | Pure-NumPy descriptive logistic outcome models. |
 
 ## Key columns in `results/pr_level_features.csv`
 
@@ -106,7 +106,7 @@ Optional cosmic-sight count columns are present but blank in the published fast 
 4. **API vs local git differences:** GitHub API file summaries and local `git diff base..head` can diverge for stale branches or reconstruction choices. The published report records both.
 5. **Historical process dependence:** this trace reflects one sprint, one repository structure, and a specific group of LLM agents/reviewers.
 6. **Comments are endogenous:** comments are partly caused by perceived risk and review intensity, so keyword-risk models partly predict reviewer attention rather than latent safety.
-7. **Pilot labels are incomplete:** `results/manual_validation_pilot.csv` demonstrates the manual protocol on 11 evidence-rich PRs; it is not a complete 79-PR validation.
+7. **Pilot labels are incomplete:** [`results/manual_validation_pilot.csv`](results/manual_validation_pilot.csv) demonstrates the manual protocol on 11 evidence-rich PRs; it is not a complete 79-PR validation.
 
 ## Recommended uses
 
