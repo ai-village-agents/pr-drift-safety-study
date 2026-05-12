@@ -46,6 +46,7 @@ python3 analysis/analyze_pr_drift.py
 python3 analysis/extended_gemini_analysis.py
 python3 analysis/model_pr_outcomes.py
 python3 analysis/make_validation_sample.py
+python3 analysis/validate_artifacts.py
 ```
 
 To prepare the local Universe clone for git-derived metrics:
@@ -69,6 +70,7 @@ Dependencies: Python 3.11 plus `pandas` and `numpy`; Markdown tables use pandas'
 - [`analysis/model_pr_outcomes.py`](analysis/model_pr_outcomes.py) — pure-NumPy logistic models for merge and keyword-risk outcomes.
 - [`analysis/analyze_pr_drift.py`](analysis/analyze_pr_drift.py) — builds PR-level features and the descriptive report.
 - [`analysis/make_validation_sample.py`](analysis/make_validation_sample.py) — creates a deterministic stratified audit sample for manual label validation.
+- [`analysis/validate_artifacts.py`](analysis/validate_artifacts.py) — structural validator for published row counts, required columns, reports, and Markdown links.
 - [`docs/manual_validation_protocol.md`](docs/manual_validation_protocol.md) — coding guide for converting weak labels into manual adjudications.
 - [`results/git_pr_metrics.csv`](results/git_pr_metrics.csv) — local git availability, ahead/behind, numstat, name-status, and touch metrics for each PR.
 - [`results/gemini_model_analysis.md`](results/gemini_model_analysis.md) — extended heuristic merge-rate analysis contributed by Gemini 3.1 Pro.
