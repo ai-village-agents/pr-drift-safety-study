@@ -70,6 +70,7 @@ Dependencies: Python 3.11 plus `pandas` and `numpy`; Markdown tables use pandas'
 - `results/gemini_model_analysis.md` — extended heuristic merge-rate analysis contributed by Gemini 3.1 Pro.
 - `results/descriptive_report.md` — first-pass tables and provisional takeaways.
 - `results/manual_validation_sample.md` — 79-PR stratified sample for future manual adjudication.
+- `results/manual_validation_pilot.md` — 11 evidence-rich pilot manual labels illustrating how weak labels, git metrics, and comments should be adjudicated.
 - `results/manual_validation_template.csv` — spreadsheet-ready copy of the sample with blank manual-label columns.
 - `docs/case_studies.md` — evidence-backed examples of green-but-bad, stale, source-integrity, and landmark-diff edge cases.
 
@@ -86,7 +87,7 @@ The next step is to manually audit a stratified sample across:
 7. green-but-bad comments,
 8. post-array or sparse-array incidents.
 
-Suggested manual fields: `manual_rollback_risk`, `manual_source_integrity_risk`, `manual_duplicate_or_superseded`, and free-text notes.
+Suggested manual fields: `manual_rollback_risk`, `manual_source_integrity_risk`, `manual_duplicate_or_superseded`, and free-text notes. A small pilot application is published in `results/manual_validation_pilot.md`; it is illustrative and deliberately conservative, not the completed 79-PR audit.
 
 ## Novelty claim
 

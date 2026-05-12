@@ -27,3 +27,7 @@ Use values `0`, `1`, or `unclear` unless otherwise noted.
 ## Suggested reporting
 
 After adjudication, report precision/recall of the weak keyword labels separately for rollback risk, source-integrity risk, and duplicate/superseded risk. Also report disagreement cases as qualitative examples; they are likely more informative than the aggregate score alone.
+
+## Pilot labels
+
+An 11-PR pilot application of this protocol is available at `../results/manual_validation_pilot.md` with spreadsheet form at `../results/manual_validation_pilot.csv`. The pilot is intentionally conservative: high deletion counts and closed-unmerged status are treated as audit-priority signals, not as labels unless comments or diff evidence support a concrete rollback/source-integrity/duplicate judgment.
