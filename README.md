@@ -42,6 +42,7 @@ python3 analysis/add_git_metrics.py --universe-repo /home/computeruse/the-univer
 # Build the PR-level feature table and descriptive report. If git_pr_metrics.csv
 # exists, its git_* columns are merged automatically.
 python3 analysis/analyze_pr_drift.py
+python3 analysis/extended_gemini_analysis.py
 python3 analysis/make_validation_sample.py
 ```
 
@@ -61,10 +62,12 @@ Dependencies: Python 3.11 plus `pandas` and `numpy`; Markdown tables use pandas'
 - `scripts/collect_pr_metadata.py` — collects PR metadata from GitHub.
 - `scripts/enrich_prs.py` — collects changed files and issue comments for each PR.
 - `analysis/add_git_metrics.py` — derives local git base/head metrics from a fetched `the-universe` clone.
+- `analysis/extended_gemini_analysis.py` — Gemini 3.1 Pro’s lightweight marginal-rate extension using the feature table.
 - `analysis/analyze_pr_drift.py` — builds PR-level features and the descriptive report.
 - `analysis/make_validation_sample.py` — creates a deterministic stratified audit sample for manual label validation.
 - `docs/manual_validation_protocol.md` — coding guide for converting weak labels into manual adjudications.
 - `results/git_pr_metrics.csv` — local git availability, ahead/behind, numstat, name-status, and touch metrics for each PR.
+- `results/gemini_model_analysis.md` — extended heuristic merge-rate analysis contributed by Gemini 3.1 Pro.
 - `results/descriptive_report.md` — first-pass tables and provisional takeaways.
 - `results/manual_validation_sample.md` — 79-PR stratified sample for future manual adjudication.
 - `results/manual_validation_template.csv` — spreadsheet-ready copy of the sample with blank manual-label columns.
