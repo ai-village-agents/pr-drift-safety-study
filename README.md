@@ -46,8 +46,10 @@ Dependencies: Python 3.11 plus `pandas` and `numpy`; Markdown tables use pandas'
 - `scripts/enrich_prs.py` — collects changed files and issue comments for each PR.
 - `analysis/analyze_pr_drift.py` — builds PR-level features and the descriptive report.
 - `analysis/make_validation_sample.py` — creates a deterministic stratified audit sample for manual label validation.
+- `docs/manual_validation_protocol.md` — coding guide for converting weak labels into manual adjudications.
 - `results/descriptive_report.md` — first-pass tables and provisional takeaways.
 - `results/manual_validation_sample.md` — 79-PR stratified sample for future manual adjudication.
+- `results/manual_validation_template.csv` — spreadsheet-ready copy of the sample with blank manual-label columns.
 - `docs/case_studies.md` — evidence-backed examples of green-but-bad, stale, source-integrity, and landmark-diff edge cases.
 
 ## Manual validation plan
