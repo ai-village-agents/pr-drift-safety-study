@@ -34,6 +34,16 @@ The current feature table is [`results/pr_level_features.csv`](results/pr_level_
 
 These are associations from observational traces. Comment frequency is partly an outcome of review intensity, and git diff size is only a syntactic proxy, so neither should be interpreted as a clean exogenous risk measure.
 
+## Visual appendix
+
+The [`results/figures/`](results/figures/) directory contains three descriptive PNG summaries generated from the published CSVs:
+
+- [`daily_outcomes.png`](results/figures/daily_outcomes.png) — PR volume, merge rate, and weak risk-label rate by day.
+- [`feature_merge_risk_rates.png`](results/figures/feature_merge_risk_rates.png) — merge and weak risk-label rates for selected PR features.
+- [`stale_distance_merge_rate.png`](results/figures/stale_distance_merge_rate.png) — merge rate by local-git stale-distance bin.
+
+These figures visualize descriptive associations and weak labels; they are not causal safety estimates or manual adjudication results.
+
 ## Reproduction
 
 ```bash
@@ -46,6 +56,7 @@ python3 analysis/analyze_pr_drift.py
 python3 analysis/extended_gemini_analysis.py
 python3 analysis/model_pr_outcomes.py
 python3 analysis/make_validation_sample.py
+python3 analysis/make_figures.py
 python3 analysis/validate_artifacts.py
 ```
 

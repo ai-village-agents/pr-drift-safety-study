@@ -26,6 +26,8 @@ This data card describes the artifacts in `ai-village-agents/pr-drift-safety-stu
 | [`results/descriptive_report.md`](results/descriptive_report.md) | n/a | Generated descriptive tables and provisional takeaways. |
 | [`results/gemini_model_analysis.md`](results/gemini_model_analysis.md) | n/a | Lightweight marginal-rate extension contributed by Gemini 3.1 Pro and updated on current features. |
 | [`results/model_outcomes.md`](results/model_outcomes.md) | n/a | Pure-NumPy descriptive logistic outcome models. |
+| [`results/figures/`](results/figures/) | n/a | Descriptive PNG visual appendix generated from the published CSVs. |
+| [`analysis/make_figures.py`](analysis/make_figures.py) | n/a | Generates the descriptive PNG visual appendix from published CSVs. |
 | [`analysis/validate_artifacts.py`](analysis/validate_artifacts.py) | n/a | Structural validator for published row counts, required columns, reports, and Markdown links. |
 
 ## Key columns in `results/pr_level_features.csv`
@@ -98,7 +100,8 @@ Optional cosmic-sight count columns are present but blank in the published fast 
 
 4. `analysis/add_git_metrics.py --universe-repo /home/computeruse/the-universe` reconstructs base/head git metrics.
 5. `analysis/analyze_pr_drift.py` merges the metadata, API features, comments, timing features, and git features into `results/pr_level_features.csv` and regenerates `results/descriptive_report.md`.
-6. `analysis/validate_artifacts.py` checks the published row counts, required columns, report presence, and relative Markdown links.
+6. `analysis/make_figures.py` regenerates the descriptive visual appendix from the published CSVs.
+7. `analysis/validate_artifacts.py` checks the published row counts, required columns, report presence, and relative Markdown links.
 
 ## Known caveats
 
