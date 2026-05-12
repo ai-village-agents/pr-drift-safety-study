@@ -30,6 +30,7 @@ The current feature table is `results/pr_level_features.csv`; the first-pass rep
 - Queue-density features (`prs_created_prior_30m`, `merges_prior_30m`) are positively associated with keyword-risk comments, consistent with PR drift under high main velocity.
 - Local git reconstruction found all 610 recorded PR base commits and all 610 head commits. However, 144 PR heads were not descendants of their recorded base, and some `git diff base_sha..head_sha` comparisons implied tens of thousands of deletions. These stale two-dot diffs are strong triage signals, not automatic failure labels.
 - Git-derived touch flags agreed with API touch flags for `main.js` and landmark paths in this snapshot, while 142 PRs had local-git deletion counts that differed from the GitHub API file-summary deletion count. This reinforces the value of recording the exact reconstruction method used for any stale-branch analysis.
+- A git-augmented descriptive logistic model raised in-sample merge AUC from 0.74 (API/topic/time features) to 0.89, with `git_head_not_descendant_of_base` carrying the clearest adjusted association. This is a reconstruction sanity check, not a deployable classifier.
 
 These are associations from observational traces. Comment frequency is partly an outcome of review intensity, and git diff size is only a syntactic proxy, so neither should be interpreted as a clean exogenous risk measure.
 
@@ -43,6 +44,7 @@ python3 analysis/add_git_metrics.py --universe-repo /home/computeruse/the-univer
 # exists, its git_* columns are merged automatically.
 python3 analysis/analyze_pr_drift.py
 python3 analysis/extended_gemini_analysis.py
+python3 analysis/model_pr_outcomes.py
 python3 analysis/make_validation_sample.py
 ```
 
@@ -63,11 +65,13 @@ Dependencies: Python 3.11 plus `pandas` and `numpy`; Markdown tables use pandas'
 - `scripts/enrich_prs.py` — collects changed files and issue comments for each PR.
 - `analysis/add_git_metrics.py` — derives local git base/head metrics from a fetched `the-universe` clone.
 - `analysis/extended_gemini_analysis.py` — Gemini 3.1 Pro’s lightweight marginal-rate extension using the feature table.
+- `analysis/model_pr_outcomes.py` — pure-NumPy logistic models for merge and keyword-risk outcomes.
 - `analysis/analyze_pr_drift.py` — builds PR-level features and the descriptive report.
 - `analysis/make_validation_sample.py` — creates a deterministic stratified audit sample for manual label validation.
 - `docs/manual_validation_protocol.md` — coding guide for converting weak labels into manual adjudications.
 - `results/git_pr_metrics.csv` — local git availability, ahead/behind, numstat, name-status, and touch metrics for each PR.
 - `results/gemini_model_analysis.md` — extended heuristic merge-rate analysis contributed by Gemini 3.1 Pro.
+- `results/model_outcomes.md` — multivariable descriptive outcome models showing how local git stale metrics change adjusted associations.
 - `results/descriptive_report.md` — first-pass tables and provisional takeaways.
 - `results/manual_validation_sample.md` — 79-PR stratified sample for future manual adjudication.
 - `results/manual_validation_pilot.md` — 11 evidence-rich pilot manual labels illustrating how weak labels, git metrics, and comments should be adjudicated.
